@@ -1,53 +1,56 @@
-var topics = ["dogs", "cats", "birds"];
+var api_key = keys;
 
-// take items in topic array and create buttons in html
-// use looping that appends a button for each string in the array
+var topics = ["cat", "dog", "bird"];
 
-// when click on button. page should grab 10 static non animated gifs images
-// when click on .gif the gif should animate
-// keeps the button from repeating
+function addButton() {
 
+  $("#buttons-view").empty();
 
-function createButton() {
-	$("#button-container").empty();
-
-	for( var i = 0; i < topics.length; i++) {
-		var button = $("<button>");
-		button.addClass("gif");
-		button.attr("data-name", topics[i]);
-		button.text(topics[i]);
-		console.log(topics)
-		$("#button-container").append(button);
-	}
+  for (var i = 0; i < topics.length; i++) {
+    var button = $("<button>");
+    button.addClass("animals");
+    button.attr("data-name", topics[i]);
+    button.text(topics[i]);
+    $("#buttons-view").append(button);
+  }
 };
 
-$("#add-topics").on("click", function(event) {
-  console.log("ADD TOPIC BUTTON WITH ENTER");
-	event.preventDefault();
 
-	// the enter button does not work - and will not add like that
+addButton();
 
-	var inputUser = $("#searchGiphy").val().trim();
-	topics.push(inputUser);
-	console.log(topics)
-	createButton();
+$("#add-topic").on("click", function(event) {
+  event.preventDefault();
+
+  var input = $("#giphy-input").val().trim();
+  topics.push(input);
+  addButton();
 });
 
-createButton();
+$(document).on("click", ".animals", function() {
+	var searchInput = $(this).attr("data-name");
+
+	var queryURL = "http://api.giphy.com/v1/gifs/search?q="+ searchInput +
+									"&api_key=" + api_key + "&limit=10";
+
+	$.ajax({
+		url:queryURL,
+		method: "GET"
+	}).then(function(response) {
 
 
-$(".gif").on("click", function() {
-    console.log(this);
-    // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
-    var state = $(this).attr("data-state");
-    // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-    // Then, set the image's data-state to animate
-    // Else set src to the data-still value
-    if (state === "still") {
-      $(this).attr("src", $(this).attr("data-animate"));
-      $(this).attr("data-state", "animate");
-    } else {
-      $(this).attr("src", $(this).attr("data-still"));
-      $(this).attr("data-state", "still");
-    }
+		console.log(response)
+
+		for (var i = 0; i < response.data.length; i++) {
+			var resp_data = response.data
+			var giphy_div = $("<div>");
+			var img = $("<img>");
+			var p = $("<p>").text("Rating: " + resp_data[i].rating);
+
+			img.attr("src", resp_data[i].images.fixed_height.url)
+			giphy_div.append(p, img);
+
+			$("#displaygifs").prepend(giphy_div);
+		}
+	})
 });
+
