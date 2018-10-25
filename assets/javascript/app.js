@@ -105,7 +105,7 @@ $(document).on("click", ".fav-button", function() {
 // 	$("#favorites-view").append(p)
 
 
-// });
+});
 
 $(document).on("click", ".dl-button", function() {
 
