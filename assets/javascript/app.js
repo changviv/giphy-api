@@ -1,4 +1,4 @@
-var api_key = keys;
+var api_key = 'A5JP5g1UDgzwg7zLWRYWHjdJMaf0zH9B';
 var topics = ["Disney", "The Godfather", "Halloween", "Kill Bill 2", "Cabin in the Woods"];
 
 function addButton() {
@@ -38,7 +38,6 @@ $("#add-topic").on("click", function(event) {
 
   var input = $("#giphy-input").val().trim();
   compare = $.inArray(input, topics)
-  console.log(compare)
 
   if (input === "") {
   	alert("This isn't a button try again")
