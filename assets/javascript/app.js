@@ -1,6 +1,5 @@
 var api_key = keys;
-var giphyCount = 0
-var topics = ["Three Billboards", "The Godfather", "Halloween", "Kill Bill", "Pulp Fiction"];
+var topics = ["Disney", "The Godfather", "Halloween", "Kill Bill 2", "Cabin in the Woods"];
 
 function addButton() {
 
@@ -15,7 +14,6 @@ function addButton() {
   }
 };
 
-// function createGiphyDiv(index, obj, fn) - add callfunction to Favorite
 function createGiphyDiv(index, obj) {
 	var giphy_div = $("<div>");
 	giphy_div.addClass("giphy-card");
@@ -29,22 +27,7 @@ function createGiphyDiv(index, obj) {
 	img.attr("data-still", obj[index].images.fixed_height_still.url);
 	img.attr("data-animate", obj[index].images.fixed_height.url);
 	img.attr("data-type", "animate");
-
-	var buttonFav = $("<button>");
-
-	buttonFav.addClass("fav-button");
-	buttonFav.text("Favorite");
-	// buttonFav.click(function() {
- //      fn();
- //  });
-
-	var a = $("<a>")
-	a.attr("href", obj[index].images.fixed_height.url)
-  var buttonDL = $("<button>");
-	buttonDL.text("Download");
-	a.append(buttonDL)
-	giphyCount++
-	giphy_div.append(p, img, $("<br>"), buttonFav, a);
+	giphy_div.append(p, img);
 	$("#displaygifs").prepend(giphy_div);
 }
 
@@ -54,7 +37,16 @@ $("#add-topic").on("click", function(event) {
   event.preventDefault();
 
   var input = $("#giphy-input").val().trim();
-  topics.push(input);
+  compare = $.inArray(input, topics)
+  console.log(compare)
+
+  if (input === "") {
+  	alert("This isn't a button try again")
+  } else if (compare === (-1)) {
+  	topics.push(input);
+  } else {
+  	alert("You added this button already")
+  }
   addButton();
   $("#giphy-input").val("");
 });
@@ -73,7 +65,6 @@ $(document).on("click", ".animals", function() {
 		for (var i = 0; i < response.data.length; i++) {
 			var resp_data = response.data
 			createGiphyDiv(i, resp_data);
-
 		}
 	})
 });
@@ -89,6 +80,3 @@ $(document).on("click", ".gifs", function() {
   }
 });
 
-// two issues - prevent space becoming a button
-// the gif removes itself and adds to favorites.
-// which i don't want. I want it to stay and for me to copy
