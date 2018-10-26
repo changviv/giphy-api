@@ -53,7 +53,7 @@ $("#add-topic").on("click", function(event) {
 $(document).on("click", ".animals", function() {
 	var searchInput = $(this).attr("data-name");
 
-	var queryURL = "http://api.giphy.com/v1/gifs/search?q="+ searchInput +
+	var queryURL = "https://api.giphy.com/v1/gifs/search?q="+ searchInput +
 									"&api_key=" + api_key + "&limit=10";
 
 	$.ajax({
