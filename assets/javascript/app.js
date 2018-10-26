@@ -1,6 +1,6 @@
 var api_key = keys;
 var giphyCount = 0
-var topics = ["cat", "dog", "bird"];
+var topics = ["Three Billboards", "The Godfather", "Halloween", "Kill Bill", "Pulp Fiction"];
 
 function addButton() {
 
@@ -15,6 +15,38 @@ function addButton() {
   }
 };
 
+// function createGiphyDiv(index, obj, fn) - add callfunction to Favorite
+function createGiphyDiv(index, obj) {
+	var giphy_div = $("<div>");
+	giphy_div.addClass("giphy-card");
+
+	var p = $("<p>")
+	p.text("Rating: " + obj[index].rating);
+
+	var img = $("<img>");
+	img.attr("src", obj[index].images.fixed_height.url);
+	img.addClass("gifs");
+	img.attr("data-still", obj[index].images.fixed_height_still.url);
+	img.attr("data-animate", obj[index].images.fixed_height.url);
+	img.attr("data-type", "animate");
+
+	var buttonFav = $("<button>");
+
+	buttonFav.addClass("fav-button");
+	buttonFav.text("Favorite");
+	// buttonFav.click(function() {
+ //      fn();
+ //  });
+
+	var a = $("<a>")
+	a.attr("href", obj[index].images.fixed_height.url)
+  var buttonDL = $("<button>");
+	buttonDL.text("Download");
+	a.append(buttonDL)
+	giphyCount++
+	giphy_div.append(p, img, $("<br>"), buttonFav, a);
+	$("#displaygifs").prepend(giphy_div);
+}
 
 addButton();
 
@@ -24,6 +56,7 @@ $("#add-topic").on("click", function(event) {
   var input = $("#giphy-input").val().trim();
   topics.push(input);
   addButton();
+  $("#giphy-input").val("");
 });
 
 $(document).on("click", ".animals", function() {
@@ -39,38 +72,8 @@ $(document).on("click", ".animals", function() {
 		console.log(response);
 		for (var i = 0; i < response.data.length; i++) {
 			var resp_data = response.data
-			var giphy_div = $("<div>");
-			giphy_div.addClass("giphy-card");
+			createGiphyDiv(i, resp_data);
 
-
-			var p = $("<p>")
-			p.attr("id", "p-"+ giphyCount);
-			p.text("Rating: " + resp_data[i].rating);
-
-			var img = $("<img>");
-			img.attr("id", "image-" + giphyCount)
-			img.attr("src", resp_data[i].images.fixed_height.url);
-			img.addClass("gifs");
-			img.attr("data-still", resp_data[i].images.fixed_height_still.url);
-			img.attr("data-animate", resp_data[i].images.fixed_height.url);
-			img.attr("data-type", "animate");
-
-			var buttonDiv = $("<div class='buttons'>");
-			var buttonFav = $("<button>");
-			var buttonDL = $("<button>");
-			buttonFav.addClass("fav-button");
-			buttonFav.attr("fav-index", giphyCount);
-			buttonFav.text("Favorite");
-
-			buttonDL.addClass("dl-button");
-			buttonDL.attr("dl-index", "dl-" + giphyCount);
-			buttonDL.text("Download");
-			giphyCount++
-
-			buttonDiv.append(buttonFav, buttonDL)
-			giphy_div.append(p, img, buttonDiv);
-
-			$("#displaygifs").prepend(giphy_div);
 		}
 	})
 });
@@ -89,25 +92,3 @@ $(document).on("click", ".gifs", function() {
 // two issues - prevent space becoming a button
 // the gif removes itself and adds to favorites.
 // which i don't want. I want it to stay and for me to copy
-
-$(document).on("click", ".fav-button", function() {
-	number = $(this).attr("fav-index");
-
-
-	console.log(number);
-
-// 	console.log($(this).attr(".giphy-card"))
-// 	var p = $("#p-" + number);
-// // 	//add ID to fav button and DL button
-// 	console.log(p)
-// // 	favDiv.append()
-
-// 	$("#favorites-view").append(p)
-
-
-});
-
-$(document).on("click", ".dl-button", function() {
-
-});
-
